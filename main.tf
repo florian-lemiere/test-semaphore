@@ -13,6 +13,7 @@ terraform {
 
 provider "local" {}
 
+# Yop
 variable "mon_mot" {
   description = "Mot à écrire dans le fichier"
   type        = string
