@@ -1,0 +1,42 @@
+---
+- name: Playbook de test sur localhost
+  hosts: localhost
+  gather_facts: yes
+
+  tasks:
+    - name: Afficher un message de test
+      debug:
+        msg: "Ceci est un test Ansible sur localhost !"
+
+    - name: Vérifier la présence d'un fichier temporaire
+      stat:
+        path: /tmp/fichier_test.txt
+      register: fichier_stat
+
+    - name: Créer le fichier temporaire s'il n'existe pas
+      file:
+        path: /tmp/fichier_test.txt
+        state: touch
+      when: not fichier_stat.stat.exists
+
+    - name: Écrire du contenu dans le fichier
+      copy:
+        dest: /tmp/fichier_test.txt
+        content: "Bonjour, ceci est un test Ansible.\n"
+
+    - name: Afficher le contenu du fichier
+      command: cat /tmp/fichier_test.txt
+      register: resultat_cat
+
+    - name: Afficher la sortie du cat
+      debug:
+        var: resultat_cat.stdout
+
+    - name: Attendre 2 secondes
+      wait_for:
+        timeout: 2
+
+    - name: Supprimer le fichier temporaire
+      file:
+        path: /tmp/fichier_test.txt
+        state: absent
