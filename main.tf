@@ -13,10 +13,19 @@ terraform {
 
 provider "local" {}
 
+variable "mon_mot" {
+  description = "Mot à écrire dans le fichier"
+  type        = string
+  default     = "TOTO"
+}
+
 # 1. Créer un fichier temporaire
 resource "local_file" "test_file" {
   filename = "/tmp/fichier_test.txt"
-  content  = "Bonjour, ceci est un test Terraform.\n"
+  content  = <<EOF
+Bonjour, ceci est un test Terraform.
+Mot : ${var.mon_mot}
+EOF
 }
 
 # 2. Lire le contenu du fichier (affiché à l'apply)
