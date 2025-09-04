@@ -38,13 +38,3 @@ resource "null_resource" "wait" {
   depends_on = [local_file.test_file]
 }
 
-# 5. Supprimer le fichier temporaire (à la destruction)
-resource "null_resource" "delete_file" {
-  provisioner "local-exec" {
-    when    = destroy
-    command = "rm -f /tmp/fichier_test.txt"
-  }
-  triggers = {
-    always_run = timestamp()
-  }
-}
